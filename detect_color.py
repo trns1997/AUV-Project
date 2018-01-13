@@ -6,7 +6,7 @@ import cv2
 import threading
 from collections import deque
 import imutils
-import serial
+#import serial
 import struct
 
 #ser = serial.Serial("COM3", 9600,)
@@ -95,6 +95,7 @@ def cvfunc():
 		output = cv2.bitwise_and(image, image, mask = mask)
 			 
 		# show the images
+
 		cv2.imshow("poop", np.hstack([image, output]))
 		cv2.waitKey(25)
 		
