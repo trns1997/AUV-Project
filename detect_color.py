@@ -69,6 +69,7 @@ def func():
 		gu = int (green1.ycor())
 		bu = int (blue1.ycor())
 		turtle.bgcolor(ru,gu,bu)
+		print(rl,gl,bl,ru,gu,bu)
 
 	turtle.mainloop()
 	
@@ -95,6 +96,8 @@ def cvfunc():
 		output = cv2.bitwise_and(image, image, mask = mask)
 			 
 		# show the images
+		image = imutils.resize(image, width=600)
+		output = imutils.resize(output, width=600)
 
 		cv2.imshow("poop", np.hstack([image, output]))
 		cv2.waitKey(25)
