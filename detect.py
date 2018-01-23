@@ -127,5 +127,6 @@ def movfunc(rl,gl,bl,ru,gu,bu):
 	camera.release()
 	cv2.destroyAllWindows()
 
-movfunc(4, 82, 15, 61, 234, 248)
+movfunc(36, 69, 13, 77, 248, 52)
+
 
