@@ -81,6 +81,9 @@ def cvfunc():
 		args = vars(ap.parse_args())
 		# load the image
 		image = cv2.imread(args["image"])
+		#image = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+		#image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+		image = cv2.cvtColor(image, cv2.COLOR_BGR2YCR_CB)
 		# define the list of boundaries
 		lower = (bl, gl, rl)
 		upper = (bu, gu, ru)
@@ -239,4 +242,5 @@ print(gu)
 print(bu)
 
 #python detect_color.txt --image pink.png
+
 

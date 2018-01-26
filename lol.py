@@ -69,19 +69,21 @@ cv2.destroyAllWindows()
 
 cap = cv2.VideoCapture(0)
 
-lower_blue = np.array([111,94,6])
-upper_blue = np.array([240,181,74])
-lower_red = np.array([2,6,121])
-upper_red = np.array([63,75,255])
+lower_blue = np.array([176, 131, 12])
+upper_blue = np.array([255, 255, 102])
+lower_red = np.array([79, 36, 60])
+upper_red = np.array([255, 126, 107])
+
 list_color = [(lower_red, upper_red), (lower_blue, upper_blue)]
 
 while(1):
 	# Take each frame
 	_, frame = cap.read()
-
+	ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
+	
 	for j in range(len(list_color)):
-		mask = cv2.inRange(frame, list_color[j][0], list_color[j][1])
-		res = cv2.bitwise_and(frame,frame, mask= mask)
+		mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
+		res = cv2.bitwise_and(ycc,ycc, mask= mask)
 		median = cv2.medianBlur(res,15)
 	
 		center = None
@@ -105,23 +107,23 @@ while(1):
 				center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 		
 				# only proceed if the radius meets a minimum size
-				if radius > 20 and j == 0:
+				if radius > 10 and j == 0:
 				# draw the circle and centroid on the frame,
 				# then update the list of tracked points
 					#cv2.circle(img, (int(x), int(y)), int(radius),
 					#	(0, 255, 255), 2)
 					# stores all the points in a array
 					point.append(center)
-					#cv2.circle(img, center, 5, (0, 0, 255), -1)
+					cv2.circle(median, center, 5, (0, 0, 255), -1)
 					print("red")
-				elif radius > 20 and j == 1:
+				elif radius > 10 and j == 1:
 				# draw the circle and centroid on the frame,
 				# then update the list of tracked points
 					#cv2.circle(img, (int(x), int(y)), int(radius),
 					#	(0, 255, 255), 2)
 					# stores all the points in a array
 					point.append(center)
-					#cv2.circle(img, center, 5, (0, 0, 255), -1)
+					cv2.circle(median, center, 5, (0, 0, 255), -1)
 					print("blue")
 
 
