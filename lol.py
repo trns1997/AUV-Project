@@ -67,10 +67,11 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 '''
 
+cnt = 0
 cap = cv2.VideoCapture(0)
 
-lower_blue = np.array([176, 131, 12])
-upper_blue = np.array([255, 255, 102])
+lower_blue = np.array([35, 29, 29])
+upper_blue = np.array([249, 129, 99])
 lower_red = np.array([79, 36, 60])
 upper_red = np.array([255, 126, 107])
 
@@ -81,55 +82,56 @@ while(1):
 	_, frame = cap.read()
 	ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 	
-	for j in range(len(list_color)):
-		mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
-		res = cv2.bitwise_and(ycc,ycc, mask= mask)
-		median = cv2.medianBlur(res,15)
-	
-		center = None
-	
-		point = []
-	
-		# finds contours 
-		contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
-				cv2.CHAIN_APPROX_SIMPLE)[-2]
-		# loop throught the contours array
-		for i in range(len(contours)):
-			# gets parameters for circles
-			c = contours[i]
-			((x, y), radius) = cv2.minEnclosingCircle(c)
-			M = cv2.moments(c)
-			# if statement to prevent contours that are too small to break the program
-			if M["m00"] == 0:
-				continue
-			else:	
-				# computes centre
-				center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+	if cnt % 8 == 0:
+		for j in range(len(list_color)):
+			mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
+			res = cv2.bitwise_and(ycc,ycc, mask= mask)
+			median = cv2.medianBlur(res,15)
 		
-				# only proceed if the radius meets a minimum size
-				if radius > 10 and j == 0:
-				# draw the circle and centroid on the frame,
-				# then update the list of tracked points
-					#cv2.circle(img, (int(x), int(y)), int(radius),
-					#	(0, 255, 255), 2)
-					# stores all the points in a array
-					point.append(center)
-					cv2.circle(median, center, 5, (0, 0, 255), -1)
-					print("red")
-				elif radius > 10 and j == 1:
-				# draw the circle and centroid on the frame,
-				# then update the list of tracked points
-					#cv2.circle(img, (int(x), int(y)), int(radius),
-					#	(0, 255, 255), 2)
-					# stores all the points in a array
-					point.append(center)
-					cv2.circle(median, center, 5, (0, 0, 255), -1)
-					print("blue")
-
-
-				cv2.imshow('mask',mask)
-				cv2.imshow('Median Blur',median)
-
+			center = None
+		
+			point = []
+		
+			# finds contours 
+			contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
+					cv2.CHAIN_APPROX_SIMPLE)[-2]
+			# loop throught the contours array
+			for i in range(len(contours)):
+				# gets parameters for circles
+				c = contours[i]
+				((x, y), radius) = cv2.minEnclosingCircle(c)
+				M = cv2.moments(c)
+				# if statement to prevent contours that are too small to break the program	
+				if M["m00"] == 0:
+					continue
+				else:	
+					# computes centre
+					center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+			
+					# only proceed if the radius meets a minimum size
+					if radius > 10 and j == 0:
+					# draw the circle and centroid on the frame,
+					# then update the list of tracked points
+						#cv2.circle(img, (int(x), int(y)), int(radius),
+						#	(0, 255, 255), 2)
+						# stores all the points in a array
+						point.append(center)
+						cv2.circle(median, center, 5, (0, 0, 255), -1)
+						print("red")
+					elif radius > 10 and j == 1:
+					# draw the circle and centroid on the frame,
+					# then update the list of tracked points
+						#cv2.circle(img, (int(x), int(y)), int(radius),
+						#	(0, 255, 255), 2)
+						# stores all the points in a array
+						point.append(center)
+						cv2.circle(median, center, 5, (0, 0, 255), -1)
+						print("blue")
+	
+	
+					cv2.imshow('mask',mask)
+					cv2.imshow('Median Blur',median)
+	cnt = cnt + 1	
 	k = cv2.waitKey(5) & 0xFF
 	if k == 27:
 	        break
