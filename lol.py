@@ -70,10 +70,10 @@ cv2.destroyAllWindows()
 cnt = 0
 cap = cv2.VideoCapture(0)
 
-lower_blue = np.array([35, 29, 29])
-upper_blue = np.array([249, 129, 99])
-lower_red = np.array([79, 36, 60])
-upper_red = np.array([255, 126, 107])
+lower_blue = np.array([101, 149, 19])
+upper_blue = np.array([253, 191, 95])
+lower_red = np.array([86, 110, 54])
+upper_red = np.array([244, 137, 98])
 
 list_color = [(lower_red, upper_red), (lower_blue, upper_blue)]
 
@@ -82,7 +82,7 @@ while(1):
 	_, frame = cap.read()
 	ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 	
-	if cnt % 8 == 0:
+	if cnt % 20 == 0:
 		for j in range(len(list_color)):
 			mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
 			res = cv2.bitwise_and(ycc,ycc, mask= mask)
@@ -129,7 +129,7 @@ while(1):
 						print("blue")
 	
 	
-					cv2.imshow('mask',mask)
+					#cv2.imshow('mask',mask)
 					cv2.imshow('Median Blur',median)
 	cnt = cnt + 1	
 	k = cv2.waitKey(5) & 0xFF
