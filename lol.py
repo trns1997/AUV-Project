@@ -70,12 +70,12 @@ cv2.destroyAllWindows()
 cnt = 0
 cap = cv2.VideoCapture(0)
 
-lower_blue = np.array([101, 149, 19])
-upper_blue = np.array([253, 191, 95])
-lower_red = np.array([86, 110, 54])
-upper_red = np.array([244, 137, 98])
+lower_yellow = np.array([101, 149, 19])
+upper_yellow = np.array([253, 191, 95])
+lower_green = np.array([86, 110, 54])
+upper_green = np.array([244, 137, 98])
 
-list_color = [(lower_red, upper_red), (lower_blue, upper_blue)]
+list_color = [(lower_green, upper_green), (lower_yellow, upper_yellow)]
 
 while(1):
 	# Take each frame
@@ -85,7 +85,7 @@ while(1):
 	if cnt % 20 == 0:
 		for j in range(len(list_color)):
 			mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
-			res = cv2.bitwise_and(ycc,ycc, mask= mask)
+			res = cv2.bitwise_and(frame,frame, mask= mask)
 			median = cv2.medianBlur(res,15)
 		
 			center = None
@@ -117,7 +117,7 @@ while(1):
 						# stores all the points in a array
 						point.append(center)
 						cv2.circle(median, center, 5, (0, 0, 255), -1)
-						print("red")
+						print("green")
 					elif radius > 10 and j == 1:
 					# draw the circle and centroid on the frame,
 					# then update the list of tracked points
@@ -126,7 +126,7 @@ while(1):
 						# stores all the points in a array
 						point.append(center)
 						cv2.circle(median, center, 5, (0, 0, 255), -1)
-						print("blue")
+						print("yellow")
 	
 	
 					#cv2.imshow('mask',mask)
