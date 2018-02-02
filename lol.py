@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 '''
 img = cv2.imread("1.jpg")
 lower_blue = np.array([111,94,6])
@@ -67,22 +68,21 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 '''
 
-cnt = 0
 cap = cv2.VideoCapture(0)
 
-lower_yellow = np.array([101, 149, 19])
-upper_yellow = np.array([253, 191, 95])
-lower_green = np.array([86, 110, 54])
-upper_green = np.array([244, 137, 98])
+lower_yellow = np.array([89, 129, 8])
+upper_yellow = np.array([252, 245, 94])
+lower_green = np.array([49, 12, 11])
+upper_green = np.array([252, 130, 106])
 
 list_color = [(lower_green, upper_green), (lower_yellow, upper_yellow)]
 
 while(1):
-	# Take each frame
-	_, frame = cap.read()
-	ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
-	
-	if cnt % 20 == 0:
+	ticks = time.clock()*1000	
+	if ticks % 250 == 0:
+		# Take each frame
+		_, frame = cap.read()
+		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 		for j in range(len(list_color)):
 			mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
 			res = cv2.bitwise_and(frame,frame, mask= mask)
@@ -131,10 +131,9 @@ while(1):
 	
 					#cv2.imshow('mask',mask)
 					cv2.imshow('Median Blur',median)
-	cnt = cnt + 1	
-	k = cv2.waitKey(5) & 0xFF
-	if k == 27:
-	        break
+		k = cv2.waitKey(5) & 0xFF
+		if k == 27:
+	       		break
 
 cv2.destroyAllWindows()
 
