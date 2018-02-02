@@ -86,5 +86,3 @@ while(1):
 
 cv2.destroyAllWindows()
 
-#(8, 118, 16, 89, 255, 142)
-
