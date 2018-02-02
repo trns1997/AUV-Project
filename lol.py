@@ -37,12 +37,11 @@ while(1):
 			mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
 			res = cv2.bitwise_and(frame,frame, mask= mask)
 			median = cv2.medianBlur(res,15)
-		
+
 			center = None
-		
 			point = []
-		
-			# finds contours 
+
+			# finds contours
 			contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
 					cv2.CHAIN_APPROX_SIMPLE)[-2]
 			# loop throught the contours array
@@ -54,7 +53,7 @@ while(1):
 				# if statement to prevent contours that are too small to break the program						
 				if M["m00"] == 0:
 					continue
-				else:	
+				else:
 					# computes centre
 					center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))	
 						# only proceed if the radius meets a minimum size
@@ -76,15 +75,15 @@ while(1):
 						point.append(center)
 						cv2.circle(median, center, 5, (0, 0, 255), -1)
 						print("yellow")
-	
-	
+
+
 					#cv2.imshow('mask',mask)
 				cv2.imshow('Median Blur',median)
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
 			break
 	frame_cnt = frame_cnt + 1
-	
+
 cv2.destroyAllWindows()
 
 #(8, 118, 16, 89, 255, 142)
