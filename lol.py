@@ -70,10 +70,10 @@ cv2.destroyAllWindows()
 
 cap = cv2.VideoCapture(0)
 
-lower_yellow = np.array([89, 129, 8])
-upper_yellow = np.array([252, 245, 94])
-lower_green = np.array([49, 12, 11])
-upper_green = np.array([252, 130, 106])
+lower_yellow = np.array([114, 145, 8])
+upper_yellow = np.array([253, 246, 88])
+lower_green = np.array([106, 11, 8])
+upper_green = np.array([253, 136, 88])
 
 list_color = [(lower_green, upper_green), (lower_yellow, upper_yellow)]
 
