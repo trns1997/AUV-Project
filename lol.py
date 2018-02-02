@@ -31,7 +31,7 @@ list_color = [(lower_green, upper_green), (lower_yellow, upper_yellow)]
 while(1):
 	# Take each frame
 	_, frame = cap.read()
-	if frame_cnt % 15 == 0:
+	if frame_cnt % 20 == 0:
 		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 		for j in range(len(list_color)):
 			mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
