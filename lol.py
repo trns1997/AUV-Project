@@ -33,7 +33,7 @@ while(1):
 	# Take each frame
 	_, frame = cap.read()
 	if frame_cnt % 20 == 0:
-		t0= time.clock()
+		#t0= time.clock()
 		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 		for j in range(len(list_color)):
 			mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
@@ -81,7 +81,7 @@ while(1):
 
 					#cv2.imshow('mask',mask)
 				cv2.imshow('Median Blur',median)
-		print(time.clock() - t0)
+		#print(time.clock() - t0)
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
 			break

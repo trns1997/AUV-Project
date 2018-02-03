@@ -26,7 +26,7 @@ def viz(contours, median, color_flag):
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
-				#print("green")
+				print("green")
 			elif radius > 10 and color_flag == 1:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
@@ -35,7 +35,7 @@ def viz(contours, median, color_flag):
 			# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
-				#print("yellow")
+				print("yellow")
 
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Median Blur',median)
@@ -56,7 +56,7 @@ while(1):
 	_, frame = cap.read()
 
 	if frame_cnt % 20 == 0:
-		t0= time.clock()
+		#t0= time.clock()
 		
 		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 
@@ -78,7 +78,8 @@ while(1):
 		
 		if contours2 != []:
 			viz(contours2, median2, 1)
-		print(time.clock() - t0)
+		
+		#print(time.clock() - t0)
 	
 	frame_cnt = frame_cnt + 1
 
