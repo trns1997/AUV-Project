@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 '''
 Math to try later
 
@@ -31,8 +32,9 @@ list_color = [(lower_green, upper_green), (lower_yellow, upper_yellow)]
 while(1):
 	# Take each frame
 	_, frame = cap.read()
-	ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 	if frame_cnt % 20 == 0:
+		t0= time.clock()
+		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 		for j in range(len(list_color)):
 			mask = cv2.inRange(ycc, list_color[j][0], list_color[j][1])
 			res = cv2.bitwise_and(frame,frame, mask= mask)
@@ -44,7 +46,7 @@ while(1):
 			# finds contours
 			contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
 					cv2.CHAIN_APPROX_SIMPLE)[-2]
-			# loop throught the contours array
+			# loop through the contours array
 			for i in range(len(contours)):
 				# gets parameters for circles
 				c = contours[i]
@@ -65,7 +67,7 @@ while(1):
 						# stores all the points in a array
 						point.append(center)
 						cv2.circle(median, center, 5, (0, 0, 255), -1)
-						print("green")
+						#print("green")
 					elif radius > 10 and j == 1:
 					# draw the circle and centroid on the frame,
 					# then update the list of tracked points
@@ -74,11 +76,12 @@ while(1):
 						# stores all the points in a array
 						point.append(center)
 						cv2.circle(median, center, 5, (0, 0, 255), -1)
-						print("yellow")
+						#print("yellow")
 
 
 					#cv2.imshow('mask',mask)
 				cv2.imshow('Median Blur',median)
+		print(time.clock() - t0)
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
 			break
