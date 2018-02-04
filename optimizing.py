@@ -70,7 +70,7 @@ while(1):
 	_, frame = cap.read()
 
 	if frame_cnt % 20 == 0:
-		#t0= time.clock()
+		t0= time.clock()
 		biggest_contour_green = []
 		biggest_contour_yellow = []
 		biggest_contour_pink = []
@@ -105,20 +105,20 @@ while(1):
 		
 		if len(biggest_contour_green) > len(biggest_contour_yellow) and len(biggest_contour_green) > len(biggest_contour_pink) :
 			res_green = cv2.bitwise_and(frame,frame, mask= mask_green)
-			median_green = cv2.medianBlur(res_green,15)
-			viz(contours_green, median_green, 0)
+			#median_green = cv2.medianBlur(res_green,15)
+			viz(contours_green, res_green, 0)
 		
 		elif len(biggest_contour_yellow) > len(biggest_contour_green) and len(biggest_contour_yellow) > len(biggest_contour_pink):
 			res_yellow = cv2.bitwise_and(frame,frame, mask= mask_yellow)
-			median_yellow = cv2.medianBlur(res_yellow,15)
-			viz(contours_yellow, median_yellow, 1)
+			#median_yellow = cv2.medianBlur(res_yellow,15)
+			viz(contours_yellow, res_yellow, 1)
 		
 		elif len(biggest_contour_pink) > len(biggest_contour_yellow) and len(biggest_contour_pink) > len(biggest_contour_green):
 			res_pink = cv2.bitwise_and(frame,frame, mask= mask_pink)
-			median_pink = cv2.medianBlur(res_pink,15)
-			viz(contours_pink, median_pink, 2)
+			#median_pink = cv2.medianBlur(res_pink,15)
+			viz(contours_pink, res_pink, 2)
 		
-		#print(time.clock() - t0)
+		print(time.clock() - t0)
 	
 	frame_cnt = frame_cnt + 1
 
