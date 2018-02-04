@@ -54,14 +54,14 @@ def viz(contours, median, color_flag):
 cap = cv2.VideoCapture(0)
 frame_cnt = 0
 
-lower_green = np.array([7, 8, 163])
-upper_green = np.array([245, 113, 247])
+lower_green = np.array([73, 8, 9])
+upper_green = np.array([252, 132, 100])
 
-lower_yellow = np.array([4, 140, 8])
-upper_yellow = np.array([247, 248, 91])
+lower_yellow = np.array([10, 129, 5])
+upper_yellow = np.array([252, 252, 75])
 
-lower_pink = np.array([6, 163, 6])
-upper_pink = np.array([252, 250, 183])
+lower_pink = np.array([5, 176, 5])
+upper_pink = np.array([252, 252, 252])
 
 list_color = [(lower_green, upper_green), (lower_yellow, upper_yellow), (lower_pink, upper_pink)]
 
@@ -69,14 +69,14 @@ while(1):
 	# Take each frame
 	_, frame = cap.read()
 
-	if frame_cnt % 20 == 0:
-		t0= time.clock()
+	if frame_cnt % 8 == 0:
+		#t0= time.clock()
+
 		biggest_contour_green = []
 		biggest_contour_yellow = []
 		biggest_contour_pink = []
 		
 		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
-		lab = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
 
 		mask_green = cv2.inRange(lab, list_color[0][0], list_color[0][1])
 
@@ -118,7 +118,7 @@ while(1):
 			#median_pink = cv2.medianBlur(res_pink,15)
 			viz(contours_pink, res_pink, 2)
 		
-		print(time.clock() - t0)
+		#print(time.clock() - t0)
 	
 	frame_cnt = frame_cnt + 1
 
