@@ -69,7 +69,7 @@ def func():
 		gu = int (green1.ycor())
 		bu = int (blue1.ycor())
 		turtle.bgcolor(ru,gu,bu)
-		print(rl,gl,bl,ru,gu,bu)
+		print(bl,gl,rl,bu,gu,ru)
 
 	turtle.mainloop()
 	
