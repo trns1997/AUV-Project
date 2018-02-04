@@ -79,16 +79,10 @@ while(1):
 		lab = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
 
 		mask_green = cv2.inRange(lab, list_color[0][0], list_color[0][1])
-		res_green = cv2.bitwise_and(frame,frame, mask= mask_green)
-		median_green = cv2.medianBlur(res_green,15)
 
 		mask_yellow = cv2.inRange(ycc, list_color[1][0], list_color[1][1])
-		res_yellow = cv2.bitwise_and(frame,frame, mask= mask_yellow)
-		median_yellow = cv2.medianBlur(res_yellow,15)
 
 		mask_pink = cv2.inRange(lab, list_color[2][0], list_color[2][1])
-		res_pink = cv2.bitwise_and(frame,frame, mask= mask_pink)
-		median_pink = cv2.medianBlur(res_pink,15)
 
 		contours_green = cv2.findContours(mask_green.copy(), cv2.RETR_EXTERNAL,
 				cv2.CHAIN_APPROX_SIMPLE)[-2]
@@ -110,12 +104,18 @@ while(1):
 		
 		
 		if len(biggest_contour_green) > len(biggest_contour_yellow) and len(biggest_contour_green) > len(biggest_contour_pink) :
+			res_green = cv2.bitwise_and(frame,frame, mask= mask_green)
+			median_green = cv2.medianBlur(res_green,15)
 			viz(contours_green, median_green, 0)
 		
 		elif len(biggest_contour_yellow) > len(biggest_contour_green) and len(biggest_contour_yellow) > len(biggest_contour_pink):
+			res_yellow = cv2.bitwise_and(frame,frame, mask= mask_yellow)
+			median_yellow = cv2.medianBlur(res_yellow,15)
 			viz(contours_yellow, median_yellow, 1)
 		
 		elif len(biggest_contour_pink) > len(biggest_contour_yellow) and len(biggest_contour_pink) > len(biggest_contour_green):
+			res_pink = cv2.bitwise_and(frame,frame, mask= mask_pink)
+			median_pink = cv2.medianBlur(res_pink,15)
 			viz(contours_pink, median_pink, 2)
 		
 		#print(time.clock() - t0)
