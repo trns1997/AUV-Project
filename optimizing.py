@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import pigpio
+#import pigpio
 import time
 
 def motor_init():
@@ -18,34 +18,29 @@ def motor_init():
 def pos(x,y):
 	x = x - 250
 	y = abs(y - 350) - 175
+	#print(x, y)
 	
-	if x < 0 and y < 0:
+	if x < -30:
 		speed_left = 1530
-		speed_right = 1530 - abs(x)
-		pi.set_servo_pulsewidth(SERVO_1, speed_left)
-		pi.set_servo_pulsewidth(SERVO_2, speed_right) 
+		speed_right = 1530 - abs(x)/2
+		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		#pi.set_servo_pulsewidth(SERVO_2, speed_right) 
 		print(speed_left, speed_right)	
-
-	elif x < 0 and y > 0:
+	
+	elif x > 30:
+		speed_left = 1530 - abs(x)/2
+		speed_right = 1530
+		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		#pi.set_servo_pulsewidth(SERVO_2, speed_right)
+		print(speed_left, speed_right)
+	
+	else:
 		speed_left = 1530
-		speed_right = 1530 - abs(x) 
-		pi.set_servo_pulsewidth(SERVO_1, speed_left)
-		pi.set_servo_pulsewidth(SERVO_2, speed_right)
-		print(speed_left, speed_right)
-	
-	elif x > 0 and y < 0:
-		speed_left = 1530 - abs(x)
 		speed_right = 1530
-		pi.set_servo_pulsewidth(SERVO_1, speed_left)
-		pi.set_servo_pulsewidth(SERVO_2, speed_right)
+		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		#pi.set_servo_pulsewidth(SERVO_2, speed_right) 
 		print(speed_left, speed_right)
-	
-	elif x > 0 and y < 0:
-		speed_left = 1530 - abs(x)
-		speed_right = 1530
-		pi.set_servo_pulsewidth(SERVO_1, speed_left)
-		pi.set_servo_pulsewidth(SERVO_2, speed_right)
- 		print(speed_left, speed_right)
+		
 	
  
 def viz(contours, median, color_flag):
@@ -98,16 +93,16 @@ def viz(contours, median, color_flag):
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("pink")
 				pos(x,y)
-			else:
-				pi.set_servo_pulsewidth(SERVO_1, init)
-                		pi.set_servo_pulsewidth(SERVO_2, init)
+			#else:
+			#	pi.set_servo_pulsewidth(SERVO_1, init)
+                	#	pi.set_servo_pulsewidth(SERVO_2, init)
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Median Blur',median)
 
 
 cap = cv2.VideoCapture(0)
 frame_cnt = 0
-motor_init()
+#motor_init()
 
 lower_green = np.array([73, 8, 9])
 upper_green = np.array([252, 132, 100])
@@ -174,9 +169,9 @@ while(1):
 			res_pink = cv2.bitwise_and(frame,frame, mask= mask_pink)
 			#median_pink = cv2.medianBlur(res_pink,15)
 			viz(contours_pink, res_pink, 2)
-		else:
-			pi.set_servo_pulsewidth(SERVO_1, init)
-                	pi.set_servo_pulsewidth(SERVO_2, init)
+		#else:
+		#	pi.set_servo_pulsewidth(SERVO_1, init)
+                #	pi.set_servo_pulsewidth(SERVO_2, init)
 		#print(time.clock() - t0)
 	
 	frame_cnt = frame_cnt + 1
