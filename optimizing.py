@@ -22,13 +22,13 @@ def pos(x,y):
 	
 	if x < -30:
 		speed_left = 1530
-		speed_right = 1530 - abs(x)/2
+		speed_right = 1530 - abs(x+30)/2
 		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		#pi.set_servo_pulsewidth(SERVO_2, speed_right) 
 		print(speed_left, speed_right)	
 	
 	elif x > 30:
-		speed_left = 1530 - abs(x)/2
+		speed_left = 1530 - abs(x-30)/2
 		speed_right = 1530
 		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		#pi.set_servo_pulsewidth(SERVO_2, speed_right)

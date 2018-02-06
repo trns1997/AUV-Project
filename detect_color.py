@@ -225,21 +225,14 @@ def movfunc():
 	
 t1 = threading.Thread(target = func)
 t2 = threading.Thread(target = cvfunc)
-t3 = threading.Thread(target = movfunc)
+#t3 = threading.Thread(target = movfunc)
 
 t1.start()
 t2.start()
 
-t1.join()
+#t1.join()
 
-t3.start()
-
-print(rl)
-print(gl)
-print(bl)
-print(ru)
-print(gu)
-print(bu)
+#t3.start()
 
 #python detect_color.txt --image pink.png
 
