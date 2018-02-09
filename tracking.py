@@ -25,6 +25,7 @@ def viz(contours, median, color_flag):
 				# then update the list of tracked points
 				#cv2.circle(img, (int(x), int(y)), int(radius),	
 					#	(0, 255, 255), 2)
+				
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
@@ -35,6 +36,7 @@ def viz(contours, median, color_flag):
 				# then update the list of tracked points
 				#cv2.circle(img, (int(x), int(y)), int(radius),	
 				#	(0, 255, 255), 2)
+				
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
@@ -45,18 +47,20 @@ def viz(contours, median, color_flag):
 				# then update the list of tracked points
 				#cv2.circle(img, (int(x), int(y)), int(radius),	
 				#	(0, 255, 255), 2)
+				
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				print("pink")
 
 	#cv2.imshow('mask',mask)
-	cv2.imshow('Median Blur',median)
+	cv2.imshow('Result', median)
 
 
 cap = cv2.VideoCapture(0)
 frame_cnt = 0
 
+# Define the lower and upper bounds range for a color in desired format(bgr/hsv/ycc/lab)
 lower_green = np.array([73, 8, 9])
 upper_green = np.array([252, 132, 100])
 
@@ -66,28 +70,26 @@ upper_yellow = np.array([252, 252, 75])
 lower_pink = np.array([4, 185, 3])
 upper_pink = np.array([252, 252, 252])
 
-list_color = [(lower_green, upper_green), (lower_yellow, upper_yellow), (lower_pink, upper_pink)]
-
 while(1):
 	# Take each frame
 	_, frame = cap.read()
 
 	# Every 6th frame is processed
 	if frame_cnt % 6 == 0:
-
+		
 		biggest_contour_green = []
 		biggest_contour_yellow = []
 		biggest_contour_pink = []
-		
+				
 		frame = cv2.resize(frame, (500, 350)) 
 		
 		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 
-		mask_green = cv2.inRange(ycc, list_color[0][0], list_color[0][1])
+		mask_green = cv2.inRange(ycc, lower_green, upper_green)
 
-		mask_yellow = cv2.inRange(ycc, list_color[1][0], list_color[1][1])
+		mask_yellow = cv2.inRange(ycc, lower_yellow, upper_yellow)
 
-		mask_pink = cv2.inRange(ycc, list_color[2][0], list_color[2][1])
+		mask_pink = cv2.inRange(ycc, lower_pink, upper_pink)
 
 		contours_green = cv2.findContours(mask_green, cv2.RETR_EXTERNAL,
 				cv2.CHAIN_APPROX_SIMPLE)[-2]

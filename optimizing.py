@@ -97,7 +97,7 @@ def viz(contours, median, color_flag):
 			#	pi.set_servo_pulsewidth(SERVO_1, init)
                 	#	pi.set_servo_pulsewidth(SERVO_2, init)
 	#cv2.imshow('mask',mask)
-	cv2.imshow('Median Blur',median)
+	cv2.imshow('Result', median)
 
 
 cap = cv2.VideoCapture(0)
@@ -112,8 +112,6 @@ upper_yellow = np.array([252, 252, 75])
 
 lower_pink = np.array([4, 185, 3])
 upper_pink = np.array([252, 252, 252])
-
-list_color = [(lower_green, upper_green), (lower_yellow, upper_yellow), (lower_pink, upper_pink)]
 
 while(1):
 	# Take each frame
@@ -130,11 +128,11 @@ while(1):
 		
 		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 
-		mask_green = cv2.inRange(ycc, list_color[0][0], list_color[0][1])
+		mask_green = cv2.inRange(ycc, lower_green, upper_green)
 
-		mask_yellow = cv2.inRange(ycc, list_color[1][0], list_color[1][1])
+		mask_yellow = cv2.inRange(ycc, lower_yellow, upper_yellow)
 
-		mask_pink = cv2.inRange(ycc, list_color[2][0], list_color[2][1])
+		mask_pink = cv2.inRange(ycc, lower_pink, upper_pink)
 
 		contours_green = cv2.findContours(mask_green, cv2.RETR_EXTERNAL,
 				cv2.CHAIN_APPROX_SIMPLE)[-2]
