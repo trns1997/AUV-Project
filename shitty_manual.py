@@ -2,10 +2,10 @@ from pynput import keyboard
 import time
 import pigpio
 
-SERVO_1 = 26
-SERVO_2 = 16
-SERVO_3 = 4
-SERVO_4 = 12
+SERVO_1 = 4
+SERVO_2 = 12
+SERVO_3 = 26
+SERVO_4 = 16
 
 pi = pigpio.pi() # Connect to local Pi.
 init = 1460

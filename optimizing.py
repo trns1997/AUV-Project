@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-#import pigpio
+import pigpio
 import time
 
 def motor_init():
@@ -18,36 +18,35 @@ def motor_init():
 	pi.set_servo_pulsewidth(SERVO_2, init)
 	pi.set_servo_pulsewidth(SERVO_3, init)
 	pi.set_servo_pulsewidth(SERVO_4, init)
-	
+
 def pos(x, y, radius):
 	x = x - 250
 	y = abs(y - 350) - 175
-	radius = radius - 10	
+	radius = radius - 10
 	#print(x, y, radius)
-	
-	if x < -30:
+
+	if x <= -30:
 		speed_left = 1530 - radius
 		speed_right = (1530 - abs(x+30)/2) - radius
-		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
-		#pi.set_servo_pulsewidth(SERVO_2, speed_right) 
-		print(speed_left, speed_right)	
-	
-	if x > 30:
+		pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		pi.set_servo_pulsewidth(SERVO_2, speed_right)
+		print(speed_left, speed_right)
+
+	if x >= 30:
 		speed_left = (1530 - abs(x-30)/2) - radius
 		speed_right = 1530 - radius
-		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
-		#pi.set_servo_pulsewidth(SERVO_2, speed_right)
+		pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
-	
-	else:
+
+	if -30 < x < 30:
 		speed_left = 1530 - radius
 		speed_right = 1530 - radius
-		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
-		#pi.set_servo_pulsewidth(SERVO_2, speed_right) 
+		pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
-		
-	
- 
+
+
 def viz(contours, median, color_flag):
 	center = None
 	point = []
@@ -58,13 +57,12 @@ def viz(contours, median, color_flag):
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
 
-		# if statement to prevent small contours to crash the program	
+		# if statement to prevent small contours to crash the program
 		if M["m00"] == 0:
 			continue
 		else:
 			# computes centre
-			center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))	
-			
+			center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 			# only proceed if the radius meets a minimum size
 			if radius > 10 and color_flag == 0:
 				# stores all the points in a array
@@ -86,16 +84,16 @@ def viz(contours, median, color_flag):
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("pink")
 				pos(x, y, radius)
-			#else:
-			#	pi.set_servo_pulsewidth(SERVO_1, init)
-                	#	pi.set_servo_pulsewidth(SERVO_2, init)
+			else:
+				pi.set_servo_pulsewidth(SERVO_1, init)
+                		pi.set_servo_pulsewidth(SERVO_2, init)
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Result', median)
 
 
 cap = cv2.VideoCapture(0)
 frame_cnt = 0
-#motor_init()
+motor_init()
 
 lower_green = np.array([73, 8, 9])
 upper_green = np.array([252, 132, 100])
@@ -116,9 +114,9 @@ while(1):
 		biggest_contour_green = []
 		biggest_contour_yellow = []
 		biggest_contour_pink = []
-		
-		frame = cv2.resize(frame, (500, 350)) 
-		
+
+		frame = cv2.resize(frame, (500, 350))
+
 		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 
 		mask_green = cv2.inRange(ycc, lower_green, upper_green)
@@ -129,42 +127,42 @@ while(1):
 
 		contours_green = cv2.findContours(mask_green, cv2.RETR_EXTERNAL,
 				cv2.CHAIN_APPROX_SIMPLE)[-2]
-		
+
 		contours_yellow = cv2.findContours(mask_yellow, cv2.RETR_EXTERNAL,
 				cv2.CHAIN_APPROX_SIMPLE)[-2]
-		
+
 		contours_pink = cv2.findContours(mask_pink, cv2.RETR_EXTERNAL,
 				cv2.CHAIN_APPROX_SIMPLE)[-2]
 
 		if len(contours_green) > 0:
 			biggest_contour_green = max(contours_green, key=cv2.contourArea)
-		
+
 		if len(contours_yellow) > 0:
 			biggest_contour_yellow = max(contours_yellow, key=cv2.contourArea)
-			
+
 		if len(contours_pink) > 0:
 			biggest_contour_pink = max(contours_pink, key=cv2.contourArea)
-		
-		
+
+
 		if len(biggest_contour_green) > len(biggest_contour_yellow) and len(biggest_contour_green) > len(biggest_contour_pink) :
 			res_green = cv2.bitwise_and(frame,frame, mask= mask_green)
 			#median_green = cv2.medianBlur(res_green,15)
 			viz(contours_green, res_green, 0)
-		
+
 		elif len(biggest_contour_yellow) > len(biggest_contour_green) and len(biggest_contour_yellow) > len(biggest_contour_pink):
 			res_yellow = cv2.bitwise_and(frame,frame, mask= mask_yellow)
 			#median_yellow = cv2.medianBlur(res_yellow,15)
 			viz(contours_yellow, res_yellow, 1)
-		
+
 		elif len(biggest_contour_pink) > len(biggest_contour_yellow) and len(biggest_contour_pink) > len(biggest_contour_green):
 			res_pink = cv2.bitwise_and(frame,frame, mask= mask_pink)
 			#median_pink = cv2.medianBlur(res_pink,15)
 			viz(contours_pink, res_pink, 2)
-		#else:
-		#	pi.set_servo_pulsewidth(SERVO_1, init)
-                #	pi.set_servo_pulsewidth(SERVO_2, init)
+		else:
+			pi.set_servo_pulsewidth(SERVO_1, init)
+                	pi.set_servo_pulsewidth(SERVO_2, init)
 		#print(time.clock() - t0)
-	
+
 	frame_cnt = frame_cnt + 1
 
 	k = cv2.waitKey(5) & 0xFF
