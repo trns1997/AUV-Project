@@ -5,8 +5,10 @@ import time
 
 def motor_init():
 	global pi, SERVO_1, SERVO_2, init
-	SERVO_1 = 4
+	SERVO_1 = 26
 	SERVO_2 = 16
+	SERVO_3 = 4
+	SERVO_4 = 12
 
 	pi = pigpio.pi()
 	init = 1460
@@ -14,29 +16,32 @@ def motor_init():
 	print("init")
 	pi.set_servo_pulsewidth(SERVO_1, init)
 	pi.set_servo_pulsewidth(SERVO_2, init)
+	pi.set_servo_pulsewidth(SERVO_3, init)
+	pi.set_servo_pulsewidth(SERVO_4, init)
 	
-def pos(x,y):
+def pos(x, y, radius):
 	x = x - 250
 	y = abs(y - 350) - 175
-	#print(x, y)
+	radius = radius - 10	
+	#print(x, y, radius)
 	
 	if x < -30:
-		speed_left = 1530
-		speed_right = 1530 - abs(x+30)/2
+		speed_left = 1530 - radius
+		speed_right = (1530 - abs(x+30)/2) - radius
 		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		#pi.set_servo_pulsewidth(SERVO_2, speed_right) 
 		print(speed_left, speed_right)	
 	
-	elif x > 30:
-		speed_left = 1530 - abs(x-30)/2
-		speed_right = 1530
+	if x > 30:
+		speed_left = (1530 - abs(x-30)/2) - radius
+		speed_right = 1530 - radius
 		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		#pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
 	
 	else:
-		speed_left = 1530
-		speed_right = 1530
+		speed_left = 1530 - radius
+		speed_right = 1530 - radius
 		#pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		#pi.set_servo_pulsewidth(SERVO_2, speed_right) 
 		print(speed_left, speed_right)
@@ -62,37 +67,25 @@ def viz(contours, median, color_flag):
 			
 			# only proceed if the radius meets a minimum size
 			if radius > 10 and color_flag == 0:
-				# draw the circle and centroid on the frame,
-				# then update the list of tracked points
-				#cv2.circle(img, (int(x), int(y)), int(radius),	
-					#	(0, 255, 255), 2)
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("green")
-				pos(x,y)
+				pos(x, y, radius)
 
 			elif radius > 10 and color_flag == 1:
-				# draw the circle and centroid on the frame,
-				# then update the list of tracked points
-				#cv2.circle(img, (int(x), int(y)), int(radius),	
-				#	(0, 255, 255), 2)
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("yellow")
-				pos(x,y)
+				pos(x, y, radius )
 
 			elif radius > 10 and color_flag == 2:
-				# draw the circle and centroid on the frame,
-				# then update the list of tracked points
-				#cv2.circle(img, (int(x), int(y)), int(radius),	
-				#	(0, 255, 255), 2)
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("pink")
-				pos(x,y)
+				pos(x, y, radius)
 			#else:
 			#	pi.set_servo_pulsewidth(SERVO_1, init)
                 	#	pi.set_servo_pulsewidth(SERVO_2, init)
