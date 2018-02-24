@@ -17,6 +17,10 @@ imu.setCompassEnable(True)
 poll_interval = imu.IMUGetPollInterval()
 cnt = 0
 
+#Get offset values for roll pitch and yaw when program begins
+imu.IMURead()
+
+
 while True:
 	if imu.IMURead():
 		if cnt % 50 == 0:
