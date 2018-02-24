@@ -25,9 +25,9 @@ offset_yaw = 0
 while offset_cnt <=50:
 	if imu.IMURead():
 		offset_data = imu.getFusionData()
-	        offset_roll += degrees(offset_data[0])
-       		offset_pitch += degrees(offset_data[1])
-        	offset_yaw += degrees(offset_data[2])
+	        offset_roll += (offset_data[0])
+      		offset_pitch += (offset_data[1])
+	       	offset_yaw += (offset_data[2])
 		offset_cnt +=1
 
 offset_roll = offset_roll/offset_cnt
@@ -40,8 +40,8 @@ while True:
 		if cnt % 50 == 0:
 			data = imu.getFusionData()
     			global roll, pitch, yaw
-    			roll = degrees(data[0]) - offset_roll
-    			pitch = degrees(data[1]) - offset_pitch
-    			yaw = degrees(data[2]) - offset_yaw
+    			roll = degrees(data[0]- offset_roll)
+    			pitch = degrees(data[1]- offset_pitch)
+    			yaw = degrees(data[2]- offset_yaw)
     			print(str(roll) + "   " + str(pitch) + "   " + str(yaw))
 		cnt += 1
