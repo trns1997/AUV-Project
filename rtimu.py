@@ -36,7 +36,7 @@ def imu_init():
 	offset_pitch = degrees(offset_pitch/offset_cnt)
 	offset_yaw = degrees(offset_yaw/offset_cnt)
 	print("offset calculated")
-	return offset_roll, offset_pitch, offset_yaw
+	return offset_roll, offset_pitch, offset_yaw, imu
 
 def test():
 	while True:
