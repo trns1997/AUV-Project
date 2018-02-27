@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
 import pigpio
-import time
+import RTIMU
 
 from rtimu import imu_init
+from math import degrees
+from time import sleep
 
 def motor_init():
 	global pi, SERVO_1, SERVO_2, init
