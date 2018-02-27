@@ -25,12 +25,12 @@ def motor_init():
 def orientation_correction(yaw):
 	if -90 < yaw < -10:
 		speed_left = 1515 + ((abs(yaw) - 5) * (0.7))
-		speed_right = 1515 - ((abs(yaw) - 5) * (0.7))
+		speed_right = 1405 - ((abs(yaw) - 5) * (0.7))
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
 	if 90 > yaw > 10:
-		speed_left = 1515 - ((abs(yaw) - 5) * (0.7))
+		speed_left = 1405 - ((abs(yaw) - 5) * (0.7))
 		speed_right = 1515 + ((abs(yaw) - 5) * (0.7))
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
