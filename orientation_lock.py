@@ -24,7 +24,7 @@ def motor_init():
 	pi.set_servo_pulsewidth(SERVO_4, init)
 
 def imu_init():
-	global offset_roll, offset_pitch, offset_yaw, imu
+	global offset_roll, offset_pitch, offset_yaw, imu, cnt
 	SETTINGS_FILE = "/home/pi/Desktop/RTIMULib2/Linux/build/RTIMULibDemo/RTIMULib.ini"
 	s = RTIMU.Settings(SETTINGS_FILE)
 	imu = RTIMU.RTIMU(s)
