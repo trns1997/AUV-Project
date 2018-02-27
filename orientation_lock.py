@@ -3,7 +3,6 @@ import numpy as np
 import pigpio
 import RTIMU
 
-from rtimu import imu_init
 from math import degrees
 from time import sleep
 
