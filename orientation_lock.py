@@ -8,10 +8,10 @@ from time import sleep
 
 def motor_init():
 	global pi, SERVO_1, SERVO_2, init
-	SERVO_1 = 26
-	SERVO_2 = 16
-	SERVO_3 = 4
-	SERVO_4 = 12
+	SERVO_1 = 4
+	SERVO_2 = 12
+	SERVO_3 = 16
+	SERVO_4 = 26
 
 	pi = pigpio.pi()
 	init = 1460
@@ -35,6 +35,10 @@ def orientation_correction(yaw):
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
+	else:
+		pi.set_servo_pulsewidth(SERVO_1, init)
+                pi.set_servo_pulsewidth(SERVO_2, init)
+                print(init, init)
 
 motor_init()
 
@@ -72,5 +76,6 @@ while True:
 			data = imu.getFusionData()
     			yaw = degrees(data[2]) - (offset_yaw)
     			print(str(yaw))
+			orientation_correction(yaw)
 		cnt += 1
 
