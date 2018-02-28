@@ -8,10 +8,10 @@ from time import sleep
 
 def motor_init():
 	global pi, SERVO_1, SERVO_2, init
-	SERVO_1 = 12
-	SERVO_2 = 4
-	SERVO_3 = 16
-	SERVO_4 = 26
+	SERVO_1 = 4 #left motor
+	SERVO_2 = 12 #right motor 
+	SERVO_3 = 16 #
+	SERVO_4 = 26 #
 
 	pi = pigpio.pi()
 	init = 1460

@@ -4,11 +4,11 @@ import pigpio
 import time
 
 def motor_init():
-	global pi, SERVO_1, SERVO_2, init
-	SERVO_1 = 26
-	SERVO_2 = 16
-	SERVO_3 = 4
-	SERVO_4 = 12
+	global pi, SERVO_1, SERVO_2, SERVO_3, SERVO_4, init
+	SERVO_1 = 4 #left motor
+	SERVO_2 = 12 #right motor
+	SERVO_3 = 16 #
+	SERVO_4 = 26 #
 
 	pi = pigpio.pi()
 	init = 1460
@@ -45,6 +45,25 @@ def pos(x, y, radius):
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
+	
+	if y <= -10:
+		speed_up = (1515 + abs(y-10)/2) - radius
+		pi.set_servo_pulsewidth(SERVO_3, speed_up)
+		pi.set_servo_pulsewidth(SERVO_4, speed_up)
+		print(speed_up)
+
+	if y >= 10:
+		speed_up = (1515 - abs(y-10)/2) - radius
+		pi.set_servo_pulsewidth(SERVO_3, speed_up)
+		pi.set_servo_pulsewidth(SERVO_4, speed_up)
+		print(speed_up)
+	
+	if -10 < y < 10:
+		speed_up = init
+		pi.set_servo_pulsewidth(SERVO_3, speed_up)
+		pi.set_servo_pulsewidth(SERVO_4, speed_up)
+		print(speed_up)
+
 
 
 def viz(contours, median, color_flag):

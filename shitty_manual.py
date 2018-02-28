@@ -4,8 +4,8 @@ import pigpio
 
 SERVO_1 = 4
 SERVO_2 = 12
-SERVO_3 = 26
-SERVO_4 = 16
+SERVO_3 = 16
+SERVO_4 = 26
 
 pi = pigpio.pi() # Connect to local Pi.
 init = 1460
