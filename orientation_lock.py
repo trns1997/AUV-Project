@@ -8,8 +8,8 @@ from time import sleep
 
 def motor_init():
 	global pi, SERVO_1, SERVO_2, init
-	SERVO_1 = 4 #left motor
-	SERVO_2 = 12 #right motor 
+	SERVO_1 = 12 #left motor
+	SERVO_2 = 4 #right motor 
 	SERVO_3 = 16 #
 	SERVO_4 = 26 #
 
@@ -23,19 +23,19 @@ def motor_init():
 	pi.set_servo_pulsewidth(SERVO_4, init)
 
 def orientation_correction(yaw):
-	if -90 < yaw < -10:
-		speed_left = 1515 + ((abs(yaw) - 5) * (0.7))
-		speed_right = 1405 - ((abs(yaw) - 5) * (0.7))
+	if -90 < yaw < -5:
+		speed_left = 1515 + ((abs(yaw) - 5) * (1.5))
+		speed_right = 1405 - ((abs(yaw) - 5) * (1.5))
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
-	if 90 > yaw > 10:
-		speed_left = 1405 - ((abs(yaw) - 5) * (0.7))
-		speed_right = 1515 + ((abs(yaw) - 5) * (0.7))
+	if 90 > yaw > 5:
+		speed_left = 1405 - ((abs(yaw) - 5) * (1.5))
+		speed_right = 1515 + ((abs(yaw) - 5) * (1.5))
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
-	if -10 <= yaw <= 10:
+	if -5 <= yaw <= 5:
 		speed_left = init
 		speed_right = init
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)

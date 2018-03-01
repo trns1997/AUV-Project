@@ -45,7 +45,7 @@ def pos(x, y, radius):
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 		print(speed_left, speed_right)
-	
+
 	if y <= -10:
 		speed_up = (1515 + abs(y-10)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
@@ -57,7 +57,7 @@ def pos(x, y, radius):
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up)
 		print(speed_up)
-	
+
 	if -10 < y < 10:
 		speed_up = init
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
@@ -106,6 +106,8 @@ def viz(contours, median, color_flag):
 			else:
 				pi.set_servo_pulsewidth(SERVO_1, init)
                 		pi.set_servo_pulsewidth(SERVO_2, init)
+				pi.set_servo_pulsewidth(SERVO_3, init)
+                                pi.set_servo_pulsewidth(SERVO_4, init)
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Result', median)
 
