@@ -55,6 +55,27 @@ def motor_init():
 	pi.set_servo_pulsewidth(SERVO_4, init)
 
 
+def orientation_correction(yaw):
+	if -90 < yaw < -5:
+		speed_left = 1515 + ((abs(yaw) - 5) * (1.5))
+		speed_right = 1405 - ((abs(yaw) - 5) * (1.5))
+		pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		pi.set_servo_pulsewidth(SERVO_2, speed_right)
+		print(speed_left, speed_right)
+	if 90 > yaw > 5:
+		speed_left = 1405 - ((abs(yaw) - 5) * (1.5))
+		speed_right = 1515 + ((abs(yaw) - 5) * (1.5))
+		pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		pi.set_servo_pulsewidth(SERVO_2, speed_right)
+		print(speed_left, speed_right)
+	if -5 <= yaw <= 5:
+		speed_left = init
+		speed_right = init
+		pi.set_servo_pulsewidth(SERVO_1, speed_left)
+		pi.set_servo_pulsewidth(SERVO_2, speed_right)
+		print(speed_left, speed_right)
+
+
 def pos(x, y, radius):
 	x = x - 250
 	y = abs(y - 350) - 175
@@ -100,6 +121,7 @@ def pos(x, y, radius):
 		pi.set_servo_pulsewidth(SERVO_4, speed_up)
 		print(speed_up)
 
+
 def pos_yellow(x, y, radius):
 	y = abs(y - 350) - 175
 	radius = radius - 10
@@ -126,14 +148,11 @@ def pos_yellow(x, y, radius):
 
 	if (x == 0):
 		if imu.IMURead():
-			if cnt % 50 == 0:
-				data = imu.getFusionData()
-	    			yaw = degrees(data[2]) - (offset_yaw)
-	    			print(str(yaw))
-				orientation_correction(yaw)
-			imu_cnt += 1
-
-
+			data = imu.getFusionData()
+	    		yaw = degrees(data[2]) - (offset_yaw)
+	    		print(str(yaw))
+			orientation_correction(yaw)
+			
 
 def viz(contours, median, color_flag):
 	center = None
@@ -175,13 +194,11 @@ def viz(contours, median, color_flag):
 			else:
 				#IMU take over
 				if imu.IMURead():
-					if cnt % 50 == 0:
-						data = imu.getFusionData()
-			    			yaw = degrees(data[2]) - (offset_yaw)
-			    			print(str(yaw))
-						orientation_correction(yaw)
-					imu_cnt += 1
-
+					data = imu.getFusionData()
+			    		yaw = degrees(data[2]) - (offset_yaw)
+			    		print(str(yaw))
+					orientation_correction(yaw)
+					
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Result', median)
 
@@ -257,24 +274,13 @@ while(1):
 		else:
 			#IMU take over
 			if imu.IMURead():
-				if cnt % 50 == 0:
-					data = imu.getFusionData()
-		    			yaw = degrees(data[2]) - (offset_yaw)
-		    			print(str(yaw))
-					orientation_correction(yaw)
-				imu_cnt += 1
+				data = imu.getFusionData()
+		    		yaw = degrees(data[2]) - (offset_yaw)
+		    		print(str(yaw))
+				orientation_correction(yaw)
+				
 		#print(time.clock() - t0)
-
-	else:
-		#IMU take over
-        	if imu.IMURead():
-        	        if cnt % 50 == 0:
-                	        data = imu.getFusionData()
-                                yaw = degrees(data[2]) - (offset_yaw)
-                                print(str(yaw))
-                                orientation_correction(yaw)
-			imu_cnt += 1
-
+			
 	frame_cnt = frame_cnt + 1
 
 	k = cv2.waitKey(5) & 0xFF
