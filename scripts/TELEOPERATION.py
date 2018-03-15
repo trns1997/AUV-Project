@@ -9,8 +9,8 @@ SERVO_4 = 26
 
 pi = pigpio.pi() # Connect to local Pi.
 init = 1460
-forward = 1560
-reverse = 1360
+forward = 1360
+reverse = 1560
 
 print("init")
 pi.set_servo_pulsewidth(SERVO_1, init)
