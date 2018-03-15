@@ -100,20 +100,20 @@ def pos(x, y, radius):
 		pi.set_servo_pulsewidth(SERVO_4, speed_up)
 		print(speed_up)
 
-def pos_yellow(y, radius):
+def pos_yellow(x, y, radius):
 	y = abs(y - 350) - 175
 	radius = radius - 10
-	
+
 	if y <= -10:
 		speed_up = (1515 + abs(y-10)/2) - radius
-		speed_up1 = (1405 + abs(y-10)/2) - radius
+		speed_up1 = (1400 + abs(y-10)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
 		print(speed_up)
-	
+
 	elif y >= 10:
 		speed_up = (1515 + abs(y-10)/2) - radius
-		speed_up1 = (1405 - abs(y-10)/2) - radius
+		speed_up1 = (1400 - abs(y-10)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
 		print(speed_up)
@@ -124,18 +124,16 @@ def pos_yellow(y, radius):
 		pi.set_servo_pulsewidth(SERVO_4, speed_up)
 		print(speed_up)
 
-	if (True):
+	if (x == 0):
 		if imu.IMURead():
 			if cnt % 50 == 0:
 				data = imu.getFusionData()
 	    			yaw = degrees(data[2]) - (offset_yaw)
 	    			print(str(yaw))
 				orientation_correction(yaw)
-			cnt += 1
+			imu_cnt += 1
 
 
-	
-	
 
 def viz(contours, median, color_flag):
 	center = None
@@ -166,7 +164,7 @@ def viz(contours, median, color_flag):
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("yellow")
-				#pos_yellow(x, y, radius)
+				pos_yellow(0, y, radius)
 
 			elif radius > 10 and color_flag == 2:
 				# stores all the points in a array
@@ -182,8 +180,8 @@ def viz(contours, median, color_flag):
 			    			yaw = degrees(data[2]) - (offset_yaw)
 			    			print(str(yaw))
 						orientation_correction(yaw)
-					cnt += 1
-				
+					imu_cnt += 1
+
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Result', median)
 
@@ -191,6 +189,7 @@ def viz(contours, median, color_flag):
 cap = cv2.VideoCapture(0)
 frame_cnt = 0
 motor_init()
+IMU_init()
 
 lower_green = np.array([73, 8, 9])
 upper_green = np.array([252, 132, 100])
@@ -263,8 +262,18 @@ while(1):
 		    			yaw = degrees(data[2]) - (offset_yaw)
 		    			print(str(yaw))
 					orientation_correction(yaw)
-				cnt += 1
+				imu_cnt += 1
 		#print(time.clock() - t0)
+
+	else:
+		#IMU take over
+        	if imu.IMURead():
+        	        if cnt % 50 == 0:
+                	        data = imu.getFusionData()
+                                yaw = degrees(data[2]) - (offset_yaw)
+                                print(str(yaw))
+                                orientation_correction(yaw)
+			imu_cnt += 1
 
 	frame_cnt = frame_cnt + 1
 
