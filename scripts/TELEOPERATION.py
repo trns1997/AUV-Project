@@ -27,12 +27,12 @@ def on_press(key):
 	elif key == keyboard.Key.tab:
 		print("up")
 		pi.set_servo_pulsewidth(SERVO_3, forward)
-		pi.set_servo_pulsewidth(SERVO_4, forward)
+		pi.set_servo_pulsewidth(SERVO_4, reverse)
 
 	elif key == keyboard.Key.ctrl:
 		print("down")
 		pi.set_servo_pulsewidth(SERVO_3, reverse)
-		pi.set_servo_pulsewidth(SERVO_4, reverse)
+		pi.set_servo_pulsewidth(SERVO_4, forward)
 
 	elif key == keyboard.Key.down:
 		print("backward")

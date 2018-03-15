@@ -29,8 +29,8 @@ def viz(contours, median, color_flag):
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
-				print("green")
-
+				#print("green")
+				print(point)
 			elif radius > 10 and color_flag == 1:
 				# draw the circle and centroid on the frame,
 				# then update the list of tracked points

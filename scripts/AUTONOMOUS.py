@@ -100,6 +100,42 @@ def pos(x, y, radius):
 		pi.set_servo_pulsewidth(SERVO_4, speed_up)
 		print(speed_up)
 
+def pos_yellow(y, radius):
+	y = abs(y - 350) - 175
+	radius = radius - 10
+	
+	if y <= -10:
+		speed_up = (1515 + abs(y-10)/2) - radius
+		speed_up1 = (1405 + abs(y-10)/2) - radius
+		pi.set_servo_pulsewidth(SERVO_3, speed_up)
+		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
+		print(speed_up)
+	
+	elif y >= 10:
+		speed_up = (1515 + abs(y-10)/2) - radius
+		speed_up1 = (1405 - abs(y-10)/2) - radius
+		pi.set_servo_pulsewidth(SERVO_3, speed_up)
+		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
+		print(speed_up)
+
+	elif -10 < y < 10:
+		speed_up = init
+		pi.set_servo_pulsewidth(SERVO_3, speed_up)
+		pi.set_servo_pulsewidth(SERVO_4, speed_up)
+		print(speed_up)
+
+	if (True):
+		if imu.IMURead():
+			if cnt % 50 == 0:
+				data = imu.getFusionData()
+	    			yaw = degrees(data[2]) - (offset_yaw)
+	    			print(str(yaw))
+				orientation_correction(yaw)
+			cnt += 1
+
+
+	
+	
 
 def viz(contours, median, color_flag):
 	center = None
@@ -123,21 +159,21 @@ def viz(contours, median, color_flag):
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("green")
-				pos(0, y, radius)
+				#pos_green(x, y, radius)
 
 			elif radius > 10 and color_flag == 1:
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("yellow")
-				pos(x, y, radius )
+				#pos_yellow(x, y, radius)
 
 			elif radius > 10 and color_flag == 2:
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("pink")
-				pos(x, y, radius)
+				#pos_pink(x, y, radius)
 			else:
 				#IMU take over
 				if imu.IMURead():
