@@ -29,19 +29,19 @@ def orientation_correction(yaw):
 		speed_right = 1405 - ((abs(yaw) - 5) * (1.5))
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
-		print(speed_left, speed_right)
+#		print(speed_left, speed_right)
 	if 90 > yaw > 5:
 		speed_left = 1405 - ((abs(yaw) - 5) * (1.5))
 		speed_right = 1515 + ((abs(yaw) - 5) * (1.5))
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
-		print(speed_left, speed_right)
+#		print(speed_left, speed_right)
 	if -5 <= yaw <= 5:
 		speed_left = init
 		speed_right = init
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
-		print(speed_left, speed_right)
+#		print(speed_left, speed_right)
 
 
 def pos(x, y, radius):
@@ -179,6 +179,7 @@ poll_interval = imu.IMUGetPollInterval()
 imu_cnt = 0
 offset_cnt = 0
 offset_yaw = 0
+yaw = 0
 
 #Get offset values for roll pitch and yaw when program begins
 while offset_cnt <=10:
@@ -208,11 +209,13 @@ upper_pink = np.array([252, 252, 252])
 while(1):
 	# Take each frame
 	_, frame = cap.read()
-	
+
 	if imu.IMURead():
-		data = imu.getFusionData()
-		yaw = degrees(data[2]) - (offset_yaw)
-		print(str(yaw))
+		if imu_cnt % 25 == 0:
+			data = imu.getFusionData()
+			yaw = degrees(data[2]) - (offset_yaw)
+			print(str(yaw))
+		imu_cnt +=1
 
 	if frame_cnt % 6 == 0:
 		#t0= time.clock()
