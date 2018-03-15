@@ -90,7 +90,7 @@ def pos(x, y, radius):
 		print(speed_up)
 
 
-def pos_yellow(x, y, radius):
+def pos_yellow(y, radius):
 	y = abs(y - 350) - 175
 	radius = radius - 10
 
@@ -114,12 +114,14 @@ def pos_yellow(x, y, radius):
 		pi.set_servo_pulsewidth(SERVO_4, speed_up)
 		print(speed_up)
 
-	if (x == 0):
+	if (True):
 		if imu.IMURead():
-			data = imu.getFusionData()
-	    		yaw = degrees(data[2]) - (offset_yaw)
-	    		print(str(yaw))
-			orientation_correction(yaw)
+			if cnt % 50 == 0:
+				data = imu.getFusionData()
+	    			yaw = degrees(data[2]) - (offset_yaw)
+	    			print(str(yaw))
+				orientation_correction(yaw)
+			cnt += 1
 			
 
 def viz(contours, median, color_flag):
@@ -151,7 +153,7 @@ def viz(contours, median, color_flag):
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("yellow")
-				pos_yellow(0, y, radius)
+				pos_yellow(y, radius)
 
 			elif radius > 10 and color_flag == 2:
 				# stores all the points in a array
@@ -162,10 +164,12 @@ def viz(contours, median, color_flag):
 			else:
 				#IMU take over
 				if imu.IMURead():
-					data = imu.getFusionData()
-			    		yaw = degrees(data[2]) - (offset_yaw)
-			    		print(str(yaw))
-					orientation_correction(yaw)
+					if cnt % 50 == 0:
+						data = imu.getFusionData()
+			    			yaw = degrees(data[2]) - (offset_yaw)
+			    			print(str(yaw))
+						orientation_correction(yaw)
+					cnt += 1
 					
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Result', median)
@@ -270,10 +274,12 @@ while(1):
 		else:
 			#IMU take over
 			if imu.IMURead():
-				data = imu.getFusionData()
-		    		yaw = degrees(data[2]) - (offset_yaw)
-		    		print(str(yaw))
-				orientation_correction(yaw)
+				if cnt % 50 == 0:
+					data = imu.getFusionData()
+		    			yaw = degrees(data[2]) - (offset_yaw)
+		    			print(str(yaw))
+					orientation_correction(yaw)
+				cnt += 1
 				
 		#print(time.clock() - t0)
 			
