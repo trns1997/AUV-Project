@@ -6,38 +6,6 @@ import RTIMU
 from math import degrees
 from time import sleep
 
-
-def IMU_init():
-	global imu, offset_yaw, imu_cnt
-	SETTINGS_FILE = "/home/pi/Desktop/RTIMULib2/Linux/build/RTIMULibDemo/RTIMULib.ini"
-	s = RTIMU.Settings(SETTINGS_FILE)
-	imu = RTIMU.RTIMU(s)
-	if (not imu.IMUInit()):
-	  print("IMU init failed")
-	  exit(1)
-	else:
-	  print("IMU init succeeded")
-	imu.setSlerpPower(0.02)
-	imu.setGyroEnable(True)
-	imu.setAccelEnable(True)
-	imu.setCompassEnable(True)
-	poll_interval = imu.IMUGetPollInterval()
-	imu_cnt = 0
-	offset_cnt = 0
-	offset_yaw = 0
-
-	#Get offset values for roll pitch and yaw when program begins
-	while offset_cnt <=10:
-		if imu.IMURead():
-			offset_data = imu.getFusionData()
-		       	offset_yaw += (offset_data[2])
-			offset_cnt +=1
-			sleep(0.2)
-
-	offset_yaw = degrees(offset_yaw/offset_cnt)
-	print("offset calculated")
-
-
 def motor_init():
 	global pi, SERVO_1, SERVO_2, SERVO_3, SERVO_4, init
 	SERVO_1 = 4 #left motor
@@ -202,11 +170,39 @@ def viz(contours, median, color_flag):
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Result', median)
 
+#IMU_INIT
+SETTINGS_FILE = "/home/pi/Desktop/RTIMULib2/Linux/build/RTIMULibDemo/RTIMULib.ini"
+s = RTIMU.Settings(SETTINGS_FILE)
+imu = RTIMU.RTIMU(s)
+if (not imu.IMUInit()):
+  print("IMU init failed")
+  exit(1)
+else:
+  print("IMU init succeeded")
+imu.setSlerpPower(0.02)
+imu.setGyroEnable(True)
+imu.setAccelEnable(True)
+imu.setCompassEnable(True)
+poll_interval = imu.IMUGetPollInterval()
+imu_cnt = 0
+offset_cnt = 0
+offset_yaw = 0
+
+#Get offset values for roll pitch and yaw when program begins
+while offset_cnt <=10:
+	if imu.IMURead():
+		offset_data = imu.getFusionData()
+	       	offset_yaw += (offset_data[2])
+		offset_cnt +=1
+		sleep(0.2)
+
+offset_yaw = degrees(offset_yaw/offset_cnt)
+print("offset calculated")
+#END IMU_INIT
 
 cap = cv2.VideoCapture(0)
 frame_cnt = 0
 motor_init()
-IMU_init()
 
 lower_green = np.array([73, 8, 9])
 upper_green = np.array([252, 132, 100])
