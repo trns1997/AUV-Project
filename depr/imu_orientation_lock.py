@@ -22,6 +22,36 @@ def motor_init():
 	pi.set_servo_pulsewidth(SERVO_3, init)
 	pi.set_servo_pulsewidth(SERVO_4, init)
 
+def IMU_init():
+	global imu, offset_yaw, imu_cnt
+	SETTINGS_FILE = "/home/pi/Desktop/RTIMULib2/Linux/build/RTIMULibDemo/RTIMULib.ini"
+	s = RTIMU.Settings(SETTINGS_FILE)
+	imu = RTIMU.RTIMU(s)
+	if (not imu.IMUInit()):
+	  print("IMU init failed")
+	  exit(1)
+	else:
+	  print("IMU init succeeded")
+	imu.setSlerpPower(0.02)
+	imu.setGyroEnable(True)
+	imu.setAccelEnable(True)
+	imu.setCompassEnable(True)
+	poll_interval = imu.IMUGetPollInterval()
+	imu_cnt = 0
+	offset_cnt = 0
+	offset_yaw = 0
+
+	#Get offset values for roll pitch and yaw when program begins
+	while offset_cnt <=10:
+		if imu.IMURead():
+			offset_data = imu.getFusionData()
+		       	offset_yaw += (offset_data[2])
+			offset_cnt +=1
+			sleep(0.2)
+
+	offset_yaw = degrees(offset_yaw/offset_cnt)
+	print("offset calculated")
+
 def orientation_correction(yaw):
 	if -90 < yaw < -5:
 		speed_left = 1515 + ((abs(yaw) - 5) * (1.5))
@@ -44,34 +74,6 @@ def orientation_correction(yaw):
 
 motor_init()
 
-SETTINGS_FILE = "/home/pi/Desktop/RTIMULib2/Linux/build/RTIMULibDemo/RTIMULib.ini"
-s = RTIMU.Settings(SETTINGS_FILE)
-imu = RTIMU.RTIMU(s)
-if (not imu.IMUInit()):
-  print("IMU init failed")
-  exit(1)
-else:
-  print("IMU init succeeded")
-imu.setSlerpPower(0.02)
-imu.setGyroEnable(True)
-imu.setAccelEnable(True)
-imu.setCompassEnable(True)
-poll_interval = imu.IMUGetPollInterval()
-cnt = 0
-offset_cnt = 0
-offset_yaw = 0
-
-#Get offset values for roll pitch and yaw when program begins
-while offset_cnt <=10:
-	if imu.IMURead():
-		offset_data = imu.getFusionData()
-	       	offset_yaw += (offset_data[2])
-		offset_cnt +=1
-		sleep(0.2)
-
-offset_yaw = degrees(offset_yaw/offset_cnt)
-print("offset calculated")
-
 while True:
 	if imu.IMURead():
 		if cnt % 50 == 0:
@@ -79,5 +81,5 @@ while True:
     			yaw = degrees(data[2]) - (offset_yaw)
     			print(str(yaw))
 			orientation_correction(yaw)
-		cnt += 1
+		imu_cnt += 1
 
