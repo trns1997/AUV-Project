@@ -45,8 +45,6 @@ def orientation_correction(yaw):
 
 
 def pos(x, y, radius):
-	x = x - 250
-	y = abs(y - 350) - 175
 	radius = radius - 10
 	#print(x, y, radius)
 
@@ -91,7 +89,6 @@ def pos(x, y, radius):
 
 
 def pos_yellow(y, radius):
-	y = abs(y - 350) - 175
 	radius = radius - 10
 
 	if y <= 50:
@@ -128,6 +125,8 @@ def viz(contours, median, color_flag):
 		c = contours[i]
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
+		x = x - 250
+		y = abs(y - 350) - 175
 
 		# if statement to prevent small contours to crash the program
 		if M["m00"] == 0:
@@ -142,7 +141,7 @@ def viz(contours, median, color_flag):
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				if len(point) > 1:
 					x = (point[0][1] + point[1][0])/2
-				pos(x, y + 250, radius)
+				pos(x, y - 75, radius)
 				print("green: " + str(x - 250) + str(abs(y - 350) - 175))
 
 			elif radius > 10 and color_flag == 2:
