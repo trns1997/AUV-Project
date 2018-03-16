@@ -94,21 +94,21 @@ def pos_yellow(y, radius):
 	y = abs(y - 350) - 175
 	radius = radius - 10
 
-	if y <= -10:
+	if y <= 50:
 		speed_up = (1515 + abs(y-10)/2) - radius
-		speed_up1 = (1400 + abs(y-10)/2) - radius
+		speed_up1 = (1380 + abs(y-10)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
 		print(speed_up)
 
-	elif y >= 10:
+	elif y >= 80:
 		speed_up = (1515 + abs(y-10)/2) - radius
-		speed_up1 = (1400 - abs(y-10)/2) - radius
+		speed_up1 = (1380 - abs(y-10)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
 		print(speed_up)
 
-	elif -10 < y < 10:
+	elif 50 < y < 80:
 		speed_up = init
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up)
@@ -140,7 +140,8 @@ def viz(contours, median, color_flag):
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("green")
-				#pos_green(x, y, radius)
+				x = (point[0][1] + point[1][0])/2
+				pos(x, y + 250, radius)
 
 			elif radius > 10 and color_flag == 1:
 				# stores all the points in a array
@@ -154,7 +155,8 @@ def viz(contours, median, color_flag):
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				#print("pink")
-				#pos_pink(x, y, radius)
+				x = (point[0][1] + point[1][0])/2
+				pos(x, y + 75, radius)
 			else:
 				#IMU take over
 				orientation_correction(yaw)
