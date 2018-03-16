@@ -45,6 +45,8 @@ def orientation_correction(yaw):
 
 
 def pos(x, y, radius):
+	x = x - 250
+        y = abs(y - 350) - 175
 	radius = radius - 10
 	#print(x, y, radius)
 
@@ -89,6 +91,7 @@ def pos(x, y, radius):
 
 
 def pos_yellow(y, radius):
+	y = abs(y - 350) - 175
 	radius = radius - 10
 
 	if y <= 50:
@@ -125,8 +128,6 @@ def viz(contours, median, color_flag):
 		c = contours[i]
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
-		x = x - 250
-		y = abs(y - 350) - 175
 
 		# if statement to prevent small contours to crash the program
 		if M["m00"] == 0:
@@ -140,28 +141,27 @@ def viz(contours, median, color_flag):
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				if len(point) > 1:
-					x = (point[0][1] + point[1][0])/2
-				pos(x, y - 75, radius)
-				print("green: " + str(x - 250) + str(abs(y - 350) - 175))
+					x = (point[0][0] + point[1][0])/2
+					y = (point[0][1] + point[1][1])/2
+					pos(x, y - 75, radius)
+					print("green: " + str(x - 250) + " " + str(abs(y - 350) -175))
 
 			elif radius > 10 and color_flag == 2:
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				pos_yellow(y, radius)
-				print("yellow: " + str(abs(y - 350) - 175))
+				print("yellow: " + str(x) + " " + str(y))
 
 			elif radius > 10 and color_flag == 1:
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				if len(point) > 1:
-					x = (point[0][1] + point[1][0])/2
+					x = (point[0][0] + point[1][0])/2
+					y = (point[0][1] + point[1][1])/2
 					pos(x, y + 75, radius)
 					print("pink: " + str(x - 250) + " " + str(abs(y - 350) - 175))
-				elif len(point) == 1:
-					pos(x, y + 75, radius)
-					print("pink: " + str(x - 250) + " " +  str(abs(y - 350) - 175))
 
 			else:
 				#IMU take over
@@ -191,7 +191,7 @@ offset_yaw = 0
 yaw = 0
 
 #Get offset values for roll pitch and yaw when program begins
-while offset_cnt <=50:
+while offset_cnt <= 25:
 	if imu.IMURead():
 		offset_data = imu.getFusionData()
 	       	offset_yaw += (offset_data[2])
@@ -220,7 +220,7 @@ while(1):
 	_, frame = cap.read()
 
 	if imu.IMURead():
-		if imu_cnt % 25 == 0:
+		if imu_cnt % 35 == 0:
 			data = imu.getFusionData()
 			yaw = degrees(data[2]) - (offset_yaw)
 			#print(str(yaw))
