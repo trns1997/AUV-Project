@@ -117,7 +117,7 @@ def pos_yellow(y, radius):
 	if (True):
 		print("pos_yellow fixing orientation: " + str(yaw))
 		orientation_correction(yaw)
-			
+
 
 def viz(contours, median, color_flag):
 	center = None
@@ -140,29 +140,35 @@ def viz(contours, median, color_flag):
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
-				x = (point[0][1] + point[1][0])/2
+				if len(point) > 1:
+					x = (point[0][1] + point[1][0])/2
 				pos(x, y + 250, radius)
-				print("green: " + (x - 250) + (y = abs(y - 350) - 175))
-
-			elif radius > 10 and color_flag == 1:
-				# stores all the points in a array
-				point.append(center)
-				cv2.circle(median, center, 5, (0, 0, 255), -1)
-				pos_yellow(y, radius)
-				print("yellow: " + (y = abs(y - 350) - 175))
+				print("green: " + str(x - 250) + str(abs(y - 350) - 175))
 
 			elif radius > 10 and color_flag == 2:
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
-				x = (point[0][1] + point[1][0])/2
-				pos(x, y + 75, radius)
-				print("pink: " + (x - 250) + (y = abs(y - 350) - 175))
+				pos_yellow(y, radius)
+				print("yellow: " + str(abs(y - 350) - 175))
+
+			elif radius > 10 and color_flag == 1:
+				# stores all the points in a array
+				point.append(center)
+				cv2.circle(median, center, 5, (0, 0, 255), -1)
+				if len(point) > 1:
+					x = (point[0][1] + point[1][0])/2
+					pos(x, y + 75, radius)
+					print("pink: " + str(x - 250) + " " + str(abs(y - 350) - 175))
+				elif len(point) == 1:
+					pos(x, y + 75, radius)
+					print("pink: " + str(x - 250) + " " +  str(abs(y - 350) - 175))
+
 			else:
 				#IMU take over
 				print("viz fixing orientation: " + str(yaw))
 				orientation_correction(yaw)
-					
+
 	#cv2.imshow('mask',mask)
 	cv2.imshow('Result', median)
 
@@ -186,7 +192,7 @@ offset_yaw = 0
 yaw = 0
 
 #Get offset values for roll pitch and yaw when program begins
-while offset_cnt <=100:
+while offset_cnt <=50:
 	if imu.IMURead():
 		offset_data = imu.getFusionData()
 	       	offset_yaw += (offset_data[2])
