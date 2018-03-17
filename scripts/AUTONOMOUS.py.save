@@ -37,16 +37,14 @@ def orientation_correction(yaw):
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 #		print(speed_left, speed_right)
 	if -5 <= yaw <= 5:
-		speed_left = 1513
-		speed_right = 1513
+		speed_left = init
+		speed_right = init
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 #		print(speed_left, speed_right)
 
 
 def pos(x, y, radius):
-	x = x - 250
-        y = abs(y - 350) - 175
 	radius = radius - 10
 	#print(x, y, radius)
 
@@ -91,29 +89,27 @@ def pos(x, y, radius):
 
 
 def pos_yellow(y, radius):
-	y = abs(y - 350) - 175
 	radius = radius - 10
 
-	if y <= 100:
-		speed_up = (1515 + abs(y-50)/2) - radius
-		speed_up1 = (1380 - abs(y-50)/2) + radius
+	if y <= 50:
+		speed_up = (1515 + abs(y-10)/2) - radius
+		speed_up1 = (1380 + abs(y-10)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
 #		print(speed_up)
 
-	elif y >= 120:
-		speed_up = (1515 + abs(y-80)/2) - radius
-		speed_up1 = (1380 - abs(y-80)/2) + radius
+	elif y >= 80:
+		speed_up = (1515 + abs(y-10)/2) - radius
+		speed_up1 = (1380 - abs(y-10)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
 #		print(speed_up)
 
-	elif 100 < y < 120:
+	elif 50 < y < 80:
 		speed_up = init
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up)
 #		print(speed_up)
-
 
 	if (True):
 		print("pos_yellow fixing orientation: " + str(yaw))
@@ -129,6 +125,8 @@ def viz(contours, median, color_flag):
 		c = contours[i]
 		((x, y), radius) = cv2.minEnclosingCircle(c)
 		M = cv2.moments(c)
+		x = x - 250
+		y = abs(y - 350) - 175
 
 		# if statement to prevent small contours to crash the program
 		if M["m00"] == 0:
@@ -143,18 +141,17 @@ def viz(contours, median, color_flag):
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				if len(point) > 1:
 					x = (point[0][0] + point[1][0])/2
-					y = (point[0][1] + point[1][1])/2
-					pos(x, y - 75, radius)
-					print("green: " + str(x - 250) + " " + str(abs(y - 350) -175))
+				pos(x, y - 75, radius)
+				print("green: " + str(x) + " " + str(y))
 
-			elif radius > 10 and color_flag == 1:
+			elif radius > 10 and color_flag == 2:
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
 				pos_yellow(y, radius)
-				print("yellow: " + str(abs(y - 350) - 175))
+				print("yellow: " + str(y))
 
-			elif radius > 10 and color_flag == 2:
+			elif radius > 10 and color_flag == 1:
 				# stores all the points in a array
 				point.append(center)
 				cv2.circle(median, center, 5, (0, 0, 255), -1)
@@ -162,7 +159,10 @@ def viz(contours, median, color_flag):
 					x = (point[0][0] + point[1][0])/2
 					y = (point[0][1] + point[1][1])/2
 					pos(x, y + 75, radius)
-					print("pink: " + str(x - 250) + " " + str(abs(y - 350) - 175))
+					print("pink2: " + str(x) + " " + str(y))					elif len(point) == 1:
+						pos(x, y + 75, radius)
+						print("pink1: " + str(x) + " " +  str(y))
+				pnt_cnt +=1
 
 			else:
 				#IMU take over
@@ -192,7 +192,7 @@ offset_yaw = 0
 yaw = 0
 
 #Get offset values for roll pitch and yaw when program begins
-while offset_cnt <= 25:
+while offset_cnt <=50:
 	if imu.IMURead():
 		offset_data = imu.getFusionData()
 	       	offset_yaw += (offset_data[2])
@@ -221,7 +221,7 @@ while(1):
 	_, frame = cap.read()
 
 	if imu.IMURead():
-		if imu_cnt % 35 == 0:
+		if imu_cnt % 25 == 0:
 			data = imu.getFusionData()
 			yaw = degrees(data[2]) - (offset_yaw)
 			#print(str(yaw))
