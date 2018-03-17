@@ -37,8 +37,8 @@ def orientation_correction(yaw):
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 #		print(speed_left, speed_right)
 	if -5 <= yaw <= 5:
-		speed_left = init
-		speed_right = init
+		speed_left = 1515
+		speed_right = 1515
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 #		print(speed_left, speed_right)
@@ -95,15 +95,15 @@ def pos_yellow(y, radius):
 	radius = radius - 10
 
 	if y <= 50:
-		speed_up = (1515 + abs(y-10)/2) - radius
-		speed_up1 = (1380 + abs(y-10)/2) - radius
+		speed_up = (1515 + abs(y-50)/2) - radius
+		speed_up1 = (1380 + abs(y-50)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
 #		print(speed_up)
 
 	elif y >= 80:
-		speed_up = (1515 + abs(y-10)/2) - radius
-		speed_up1 = (1380 - abs(y-10)/2) - radius
+		speed_up = (1515 + abs(y-80)/2) - radius
+		speed_up1 = (1380 - abs(y-80)/2) - radius
 		pi.set_servo_pulsewidth(SERVO_3, speed_up)
 		pi.set_servo_pulsewidth(SERVO_4, speed_up1)
 #		print(speed_up)
