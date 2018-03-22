@@ -25,14 +25,14 @@ def motor_init():
 
 def orientation_correction(yaw):
 	if -90 < yaw < -5:
-		speed_left = 1515 + ((abs(yaw) - 5) * (1.5))
-		speed_right = 1405 - ((abs(yaw) - 5) * (1.5))
+		speed_right = 1515 + ((abs(yaw) - 5) * (1.5))
+		speed_left = 1405 - ((abs(yaw) - 5) * (1.5))
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 #		print(speed_left, speed_right)
 	if 90 > yaw > 5:
-		speed_left = 1405 - ((abs(yaw) - 5) * (1.5))
-		speed_right = 1515 + ((abs(yaw) - 5) * (1.5))
+		speed_right = 1405 - ((abs(yaw) - 5) * (1.5))
+		speed_left = 1515 + ((abs(yaw) - 5) * (1.5))
 		pi.set_servo_pulsewidth(SERVO_1, speed_left)
 		pi.set_servo_pulsewidth(SERVO_2, speed_right)
 #		print(speed_left, speed_right)
@@ -207,14 +207,14 @@ cap = cv2.VideoCapture(0)
 frame_cnt = 0
 motor_init()
 
-lower_green = np.array([73, 8, 9])
-upper_green = np.array([252, 132, 100])
+#lower_green = np.array([1, 1, 1])
+#upper_green = np.array([252, 128, 87])
 
-lower_yellow = np.array([10, 123, 5])
-upper_yellow = np.array([252, 252, 75])
+lower_yellow = np.array([0, 155, 121])
+upper_yellow = np.array([253, 252, 253])
 
-lower_pink = np.array([4, 185, 3])
-upper_pink = np.array([252, 252, 252])
+#lower_pink = np.array([4, 173, 102])
+#upper_pink = np.array([252, 253, 253])
 
 while(1):
 	# Take each frame
@@ -238,29 +238,29 @@ while(1):
 
 		ycc = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
 
-		mask_green = cv2.inRange(ycc, lower_green, upper_green)
+		#mask_green = cv2.inRange(ycc, lower_green, upper_green)
 
 		mask_yellow = cv2.inRange(ycc, lower_yellow, upper_yellow)
 
-		mask_pink = cv2.inRange(ycc, lower_pink, upper_pink)
+		#mask_pink = cv2.inRange(ycc, lower_pink, upper_pink)
 
-		contours_green = cv2.findContours(mask_green, cv2.RETR_EXTERNAL,
-				cv2.CHAIN_APPROX_SIMPLE)[-2]
+		#contours_green = cv2.findContours(mask_green, cv2.RETR_EXTERNAL,
+#				cv2.CHAIN_APPROX_SIMPLE)[-2]
 
 		contours_yellow = cv2.findContours(mask_yellow, cv2.RETR_EXTERNAL,
 				cv2.CHAIN_APPROX_SIMPLE)[-2]
 
-		contours_pink = cv2.findContours(mask_pink, cv2.RETR_EXTERNAL,
-				cv2.CHAIN_APPROX_SIMPLE)[-2]
+		#contours_pink = cv2.findContours(mask_pink, cv2.RETR_EXTERNAL,
+#				cv2.CHAIN_APPROX_SIMPLE)[-2]
 
-		if len(contours_green) > 0:
-			biggest_contour_green = max(contours_green, key=cv2.contourArea)
+		#if len(contours_green) > 0:
+#			biggest_contour_green = max(contours_green, key=cv2.contourArea)
 
 		if len(contours_yellow) > 0:
 			biggest_contour_yellow = max(contours_yellow, key=cv2.contourArea)
 
-		if len(contours_pink) > 0:
-			biggest_contour_pink = max(contours_pink, key=cv2.contourArea)
+		#if len(contours_pink) > 0:
+#			biggest_contour_pink = max(contours_pink, key=cv2.contourArea)
 
 
 		if len(biggest_contour_green) > len(biggest_contour_yellow) and len(biggest_contour_green) > len(biggest_contour_pink) :

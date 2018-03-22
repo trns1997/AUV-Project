@@ -9,8 +9,8 @@ SERVO_4 = 26
 
 pi = pigpio.pi() # Connect to local Pi.
 init = 1460
-forward = 1360
-reverse = 1560
+forward = 1000
+reverse = 1900
 
 print("init")
 pi.set_servo_pulsewidth(SERVO_1, init)
@@ -21,15 +21,15 @@ pi.set_servo_pulsewidth(SERVO_4, init)
 def on_press(key):
 	if key == keyboard.Key.up:
 		print("forward")
-		pi.set_servo_pulsewidth(SERVO_1, forward)
+		pi.set_servo_pulsewidth(SERVO_1, forward+80)
 		pi.set_servo_pulsewidth(SERVO_2, forward)
 
-	elif key == keyboard.Key.tab:
+	elif key == keyboard.Key.ctrl:
 		print("up")
 		pi.set_servo_pulsewidth(SERVO_3, forward)
 		pi.set_servo_pulsewidth(SERVO_4, reverse)
 
-	elif key == keyboard.Key.ctrl:
+	elif key == keyboard.Key.tab:
 		print("down")
 		pi.set_servo_pulsewidth(SERVO_3, reverse)
 		pi.set_servo_pulsewidth(SERVO_4, forward)
@@ -38,11 +38,11 @@ def on_press(key):
 		print("backward")
 		pi.set_servo_pulsewidth(SERVO_1, reverse)
 		pi.set_servo_pulsewidth(SERVO_2, reverse)
-	elif key == keyboard.Key.right:
+	elif key == keyboard.Key.left:
 		print("right")
 		pi.set_servo_pulsewidth(SERVO_1, reverse)
 		pi.set_servo_pulsewidth(SERVO_2, forward)
-	elif key == keyboard.Key.left:
+	elif key == keyboard.Key.right:
 		print("left")
 		pi.set_servo_pulsewidth(SERVO_1, forward)
 		pi.set_servo_pulsewidth(SERVO_2, reverse)
