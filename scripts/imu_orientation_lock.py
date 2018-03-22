@@ -83,7 +83,7 @@ print("offset calculated")
 
 start_time = time.time()
 while True:
-	if(time.time() - start_time < 5):
+	if(time.time() - start_time < 11):
 		if imu.IMURead():
 			if cnt % 50 == 0:
 				data = imu.getFusionData()
@@ -93,7 +93,7 @@ while True:
 				speed2 = 1600
 				orientation_correction(yaw, speed1, speed2)
 			cnt += 1
-	elif (5 <= time.time() - start_time <= 7):
+	elif (11 <= time.time() - start_time < 13):
 		if imu.IMURead():
                         if cnt % 50 == 0:
                                 data = imu.getFusionData()
@@ -103,7 +103,7 @@ while True:
 				speed2 = 1200
                                 orientation_correction(yaw, speed1, speed2)
 			cnt += 1
-	else:
+	elif (13 <= time.time() - start_time < 16):
 		if imu.IMURead():
                         if cnt % 50 == 0:
                                 data = imu.getFusionData()
@@ -113,5 +113,11 @@ while True:
                                 speed2 = init
                                 orientation_correction(yaw, speed1, speed2)
                         cnt += 1
+	else:
+		pi.set_servo_pulsewidth(SERVO_1, init)
+                pi.set_servo_pulsewidth(SERVO_2, init)
+                pi.set_servo_pulsewidth(SERVO_3, init)
+                pi.set_servo_pulsewidth(SERVO_4, init)
+		exit(1)
 
 
